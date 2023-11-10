@@ -39,7 +39,7 @@ double top(){
 
 void recursive_stack(list *stack){
   if(stack != NULL){
-    printf("%f, ", stack->item);
+    printf("%.2lf, ", stack->item);
     recursive_stack(stack->next);
   }
 }
@@ -69,33 +69,40 @@ int main(int argc, char *argv[]){
   for (int i = 0; i < count; i++) {
     double num1, num2, answer;
     if (strcmp(tokens[i], "+") == 0) {
+      if(debug)printf("<- '+' (演算子)\n");
       num1 = pop();
       num2 = pop();
       push(num1 + num2);
     } else if (strcmp(tokens[i], "-") == 0) {
+      if(debug)printf("<- '-' (演算子)\n");
       num1 = pop();
       num2 = pop();
       push(num2 - num1);
     } else if (strcmp(tokens[i], "*") == 0) {
+      if(debug)printf("<- '×' (演算子)\n");
       num1 = pop();
       num2 = pop();
       push(num1 * num2);
     } else if (strcmp(tokens[i], "/") == 0) {
+      if(debug)printf("<- '÷' (演算子)\n");
       num1 = pop();
       num2 = pop();
       push(num2 / num1);
     } else if (strcmp(tokens[i], "sqrt") == 0) {
-    num1 = pop();
-    push(sqrt(num1));
+      if(debug)printf("<- '√' (演算子)\n");
+      num1 = pop();
+      push(sqrt(num1));
     } else if (strcmp(tokens[i], "pow") == 0) {
-    num1 = pop();
-    num2 = pop();
+      if(debug)printf("<- '^' (演算子)\n");
+      num1 = pop();
+      num2 = pop();
     push(pow(num2, num1));
     } else {
+      if(debug)printf("<- %.2lf (数値)\n",atof(tokens[i]));
       push(atof(tokens[i]));
     }
     if(debug)print_stack();
   }
-  printf("答え %f\n",top());
+  printf("答え %.2lf\n",top());
   return 0;
 }
