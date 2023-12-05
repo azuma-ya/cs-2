@@ -23,11 +23,9 @@ typedef edgecell *vertices[N];
 typedef struct
 {
     int vertex_num;
+    int edge_num;
     vertices vtop;
 } graph;
-
-// 深さ探索用のデータ型定義
-typedef boolean seen[N];
 
 int read_adjacency_matrix(char *datafile, adjmatrix mat)
 {
@@ -49,7 +47,7 @@ int read_adjacency_matrix(char *datafile, adjmatrix mat)
             fscanf(fp, "%d\n", &mat[src][dest]); // 隣接行列の要素を１つずつ読み込む
         }
     }
-    fclose(fp); // ファイルを閉じる
+    fclose(fp); // ファイルを閉
     return vertex_num;
 }
 
@@ -107,60 +105,95 @@ void free_graph(graph *g)
     }
 }
 
-// 深さ探索用データの初期化
-void init_seen(seen seen)
+void init_matrix(adjmatrix *mat)
 {
-    for (int i = 0; i < N; i++)
+    int i, j;
+    for (i = 0; i < N; i++)
     {
-        seen[i] = false;
-    }
-}
-
-// 頂点s を始点とした深さ優先探索
-void dfs(int s, graph *g, seen seen)
-{
-    // 頂点s を探索済みにする
-    seen[s] = true;
-    edgecell *edge;
-    for (edge = g->vtop[s]; edge != NULL; edge = edge->next)
-    {
-        // edge.destination がすでに探索済みならば、スキップする
-        if (seen[edge->destination])
-            continue;
-        // edge.destination 始点で深さ優先探索を行う (関数を再帰させる)
-        dfs(edge->destination, g, seen);
-    }
-    return;
-}
-
-// 強連結判定
-boolean is_strong_graph(graph *g, seen seen)
-{
-    vindex src;
-    // すべての頂点からのパスの探索を行う
-    for (src = 0; src < g->vertex_num; src++)
-    {
-        // seen を初期化
-        init_seen(seen);
-        // 頂点src からのパスを、深さ優先探索する
-        dfs(src, g, seen);
-        vindex i;
-        for (i = 0; i < g->vertex_num; i++)
+        for (j = 0; j < N; j++)
         {
-            // 任意の頂点へのパスが一つでもなければfalse を返して終了
-            if (seen[i] == false)
-                return false;
+            (*mat)[i][j] = 0;
         }
     }
-    return true;
+}
+
+void copy_matrix(adjmatrix mat, adjmatrix *copy)
+{
+    int i, j;
+    for (i = 0; i < N; i++)
+    {
+        for (j = 0; j < N; j++)
+        {
+            (*copy)[i][j] = mat[i][j];
+        }
+    }
+}
+
+void add_matrix(adjmatrix *a, adjmatrix b){
+    int x, y;
+    for (x = 0; x < N; x++)
+    {
+        for (y = 0; y < N; y++)
+        {
+            (*a)[x][y] += b[x][y];
+        } 
+    }
+}
+
+void multiply_matrix(adjmatrix a, adjmatrix b, adjmatrix *ans, int s)
+{
+    int i, j, k;
+    for (i = 0; i < s; i++)
+    {
+        for (j = 0; j < s; j++)
+        {
+            for (k = 0; k < s; k++)
+            {
+                (*ans)[i][j] += a[i][k] * b[k][j];
+            }
+        }
+    }
+}
+
+void print_matrix(adjmatrix mat, int s)
+{
+    vindex i, j;
+    for (i = 0; i < s; i++)
+    {
+        for (j = 0; j < s; j++)
+        {
+            printf("%d", mat[i][j]);
+            if (mat[i][j] < 10)
+                printf(" ");
+            if (mat[i][j] < 100)
+                printf(" ");
+        }
+        puts("");
+    }
+    puts("");
+}
+
+void power_matrix(adjmatrix mat, adjmatrix *ans, int s, int n)
+{
+    int v;
+    adjmatrix temp;
+    copy_matrix(mat, &temp);
+    for (v = 1; v < n; v++)
+    {
+        init_matrix(ans);
+        multiply_matrix(mat, temp, ans, s);
+        copy_matrix(*ans, &temp);
+    }
+    copy_matrix(temp, ans);
 }
 
 int main(int argc, char *argv[])
 {
     char *datafile; // 入力データのファイル名
     adjmatrix mat;
+    adjmatrix ans;
+    adjmatrix ans_sum;
     graph g;
-    seen seen;
 
     if (argc <= 1)
     {
@@ -170,13 +203,29 @@ int main(int argc, char *argv[])
 
     datafile = argv[1]; // ファイル名の取得
     g.vertex_num = read_adjacency_matrix(datafile, mat);
-    translate_into_graph(mat, &g);
 
-    if (is_strong_graph(&g, seen))
-        puts("強連結です");
-    else
-        puts("強連結でない");
+    init_matrix(&ans_sum);
 
-    free_graph(&g);
+    for (int i = 1; i < g.vertex_num - 1; i++)
+    {
+        power_matrix(mat, &ans, g.vertex_num, i);
+        add_matrix(&ans_sum, ans);
+        print_matrix(ans, g.vertex_num);
+    }
+
+    print_matrix(ans_sum, g.vertex_num);
+    for (int x = 0; x < g.vertex_num; x++)
+    {
+        for (int y = 0; y < g.vertex_num; y++)
+        {
+            if(ans_sum[x][y] == 0){
+                puts("");
+                printf("強連結でない\n");
+                return 0;
+            }
+        }
+    }
+    puts("");
+    printf("強連結です\n");
     return 0;
 }
