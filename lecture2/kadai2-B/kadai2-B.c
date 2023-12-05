@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <malloc.h>
 
-#define N 50
+#define N 5
 
 // 隣接行列用のデータ構造の定義
 #define boolean int              // C 言語には boolean 型がないので，ここで (無理矢理) 宣言

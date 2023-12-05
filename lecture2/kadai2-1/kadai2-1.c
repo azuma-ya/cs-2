@@ -105,27 +105,38 @@ void free_graph(graph *g)
     }
 }
 
-void init_matrix(adjmatrix *mat, int s)
+void init_matrix(adjmatrix *mat)
 {
     int i, j;
-    for (i = 0; i < s; i++)
+    for (i = 0; i < N; i++)
     {
-        for (j = 0; j < s; j++)
+        for (j = 0; j < N; j++)
         {
             (*mat)[i][j] = 0;
         }
     }
 }
 
-void copy_matrix(adjmatrix mat, adjmatrix *copy, int s)
+void copy_matrix(adjmatrix mat, adjmatrix *copy)
 {
     int i, j;
-    for (i = 0; i < s; i++)
+    for (i = 0; i < N; i++)
     {
-        for (j = 0; j < s; j++)
+        for (j = 0; j < N; j++)
         {
             (*copy)[i][j] = mat[i][j];
         }
+    }
+}
+
+void add_matrix(adjmatrix *a, adjmatrix b){
+    int x, y;
+    for (x = 0; x < N; x++)
+    {
+        for (y = 0; y < N; y++)
+        {
+            (*a)[x][y] += b[x][y];
+        } 
     }
 }
 
@@ -159,33 +170,21 @@ void print_matrix(adjmatrix mat, int s)
         }
         puts("");
     }
+    puts("");
 }
 
 void power_matrix(adjmatrix mat, adjmatrix *ans, int s, int n)
 {
     int v;
     adjmatrix temp;
-    copy_matrix(mat, &temp, s);
-    for (v = 0; v < n - 1; v++)
+    copy_matrix(mat, &temp);
+    for (v = 1; v < n; v++)
     {
-        init_matrix(ans, s);
+        init_matrix(ans);
         multiply_matrix(mat, temp, ans, s);
-        copy_matrix(*ans, &temp, s);
+        copy_matrix(*ans, &temp);
     }
-}
-
-int find_path(graph *g, int i, int j)
-{
-    vindex v;
-    for (v = 0; v < g->vertex_num; v++)
-    {
-        edgecell *edge;
-        for (edge = g->vtop[v]; edge != NULL; edge = edge->next)
-        {
-            printf("  %d -> %d;\n", v + 1, edge->destination + 1);
-        }
-    }
-    return 1;
+    copy_matrix(temp, ans);
 }
 
 int main(int argc, char *argv[])
@@ -193,6 +192,7 @@ int main(int argc, char *argv[])
     char *datafile; // 入力データのファイル名
     adjmatrix mat;
     adjmatrix ans;
+    adjmatrix ans_sum;
     graph g;
 
     if (argc <= 1)
@@ -200,12 +200,32 @@ int main(int argc, char *argv[])
         fprintf(stderr, "##### ファイル名を指定してください\n");
         return 1;
     }
+
     datafile = argv[1]; // ファイル名の取得
     g.vertex_num = read_adjacency_matrix(datafile, mat);
-    power_matrix(mat, &ans, g.vertex_num, g.vertex_num - 1);
-    print_matrix(ans, g.vertex_num);
-    // translate_into_graph(mat, &g);
-    // print_graph(&g);
-    // free_graph(&g);
+
+    init_matrix(&ans_sum);
+
+    for (int i = 1; i < g.vertex_num - 1; i++)
+    {
+        power_matrix(mat, &ans, g.vertex_num, i);
+        add_matrix(&ans_sum, ans);
+        print_matrix(ans, g.vertex_num);
+    }
+
+    print_matrix(ans_sum, g.vertex_num);
+    for (int x = 0; x < g.vertex_num; x++)
+    {
+        for (int y = 0; y < g.vertex_num; y++)
+        {
+            if(ans_sum[x][y] == 0){
+                puts("");
+                printf("強連結でない\n");
+                return 0;
+            }
+        }
+    }
+    puts("");
+    printf("強連結です\n");
     return 0;
 }
