@@ -3,13 +3,6 @@
 #include <malloc.h>
 #include <sys/time.h>
 
-typedef struct timelog
-{
-    int data_size;
-    double time_stamp;
-    struct timelog *next;
-} timelog;
-
 double gettime()
 {
     struct timeval tp;
@@ -19,16 +12,7 @@ double gettime()
     return ret;
 }
 
-void time_stamp(timelog **time_log, int size)
-{
-    timelog *log = (timelog *)malloc(sizeof(timelog));
-    log->data_size = size;
-    log->time_stamp = gettime();
-    log->next = *time_log;
-    *time_log = log;
-}
-
-void bucket_sort(int arr[], int n, int buckets[], int under, int interval, timelog **time_log)
+void bucket_sort(int arr[], int n, int buckets[], int under)
 {
     for (int i = 0; i < n; i++)
     {
@@ -41,21 +25,9 @@ void bucket_sort(int arr[], int n, int buckets[], int under, int interval, timel
     {
         for (int j = 0; j < buckets[i]; j++)
         {
-            if (k % interval == 0)
-                time_stamp(time_log, k);
             arr[k] = i;
             k++;
         }
-    }
-}
-
-void free_time_log(timelog *time_log)
-{
-    timelog *log, *next_log;
-    for (log = time_log; log != NULL; log = next_log)
-    {
-        next_log = log->next;
-        free(log);
     }
 }
 
@@ -67,9 +39,7 @@ int main(int argc, char *argv[])
     int *arr;       // 入力データ格納場所
     int *buckets;
     int under;
-    double time_start;
-    timelog *time_log;
-    int interval;
+    double time_start, time_end;
 
     if (argc <= 1)
     {
@@ -113,13 +83,6 @@ int main(int argc, char *argv[])
     }
     under = atoi(argv[3]);
 
-    if (argc <= 4)
-    {
-        fprintf(stderr, "##### タイムスタンプ間隔を指定してください\n");
-        return 1;
-    }
-    interval = atoi(argv[4]);
-
     buckets = (int *)malloc(under * sizeof(int));
     for (int i = 0; i < under; i++)
     {
@@ -127,15 +90,16 @@ int main(int argc, char *argv[])
     }
 
     time_start = gettime();
-    bucket_sort(arr, n, buckets, under, interval, &time_log);
-    time_stamp(&time_log, n);
+    bucket_sort(arr, n, buckets, under);
+    time_end = gettime();
 
-    for (timelog *log = time_log; log != NULL; log = log->next)
-        fprintf(stderr, "データ数: %d バケットソートの実行時間 = %lf[秒]\n", log->data_size, log->time_stamp - time_start);
+    for (int i = 0; i < n; i++)
+        printf("%d\n", arr[i]);
+
+    fprintf(stderr, "データ数: %d バケットソートの実行時間 = %lf[秒]\n", n, time_end - time_start);
 
     free(arr);
     free(buckets);
-    free_time_log(time_log);
 
     return 0;
 }

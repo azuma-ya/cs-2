@@ -3,13 +3,6 @@
 #include <malloc.h>
 #include <sys/time.h>
 
-typedef struct timelog
-{
-    int data_size;
-    double time_stamp;
-    struct timelog *next;
-} timelog;
-
 double gettime()
 {
     struct timeval tp;
@@ -19,15 +12,6 @@ double gettime()
     return ret;
 }
 
-void time_stamp(timelog **time_log, int size)
-{
-    timelog *log = (timelog *)malloc(sizeof(timelog));
-    log->data_size = size;
-    log->time_stamp = gettime();
-    log->next = *time_log;
-    *time_log = log;
-}
-
 void swap(int *a, int *b)
 {
     int temp = *a;
@@ -35,7 +19,7 @@ void swap(int *a, int *b)
     *b = temp;
 }
 
-int partition(int arr[], int low, int high, int interval, timelog **time_log)
+int partition(int arr[], int low, int high)
 {
     for (int i = low; i < high; i++)
     {
@@ -44,32 +28,21 @@ int partition(int arr[], int low, int high, int interval, timelog **time_log)
             swap(&arr[low], &arr[i]);
             low++;
         }
-        if (i % interval == 0)
-            time_stamp(time_log, i);
     }
     swap(&arr[low], &arr[high]);
     return low;
 }
 
-void quick_sort(int arr[], int low, int high, int interval, timelog **time_log)
+void quick_sort(int arr[], int low, int high)
 {
     if (low < high)
     {
-        int pivot = partition(arr, low, high, interval, time_log);
-        quick_sort(arr, low, pivot - 1, interval, time_log);
-        quick_sort(arr, pivot + 1, high, interval, time_log);
+        int pivot = partition(arr, low, high);
+        quick_sort(arr, low, pivot - 1);
+        quick_sort(arr, pivot + 1, high);
     }
 }
 
-void free_time_log(timelog *time_log)
-{
-    timelog *log, *next_log;
-    for (log = time_log; log != NULL; log = next_log)
-    {
-        next_log = log->next;
-        free(log);
-    }
-}
 
 int main(int argc, char *argv[])
 {
@@ -77,9 +50,7 @@ int main(int argc, char *argv[])
     FILE *fp;       // 入力データのファイルポインタ
     int n;          // 入力データのデータ数
     int *arr;       // 入力データ格納場所
-    double time_start;
-    timelog *time_log;
-    int interval;
+    double time_start, time_end;
 
     if (argc <= 1)
     {
@@ -95,31 +66,37 @@ int main(int argc, char *argv[])
     }
     n = atoi(argv[2]);
 
-    if (argc <= 3)
-    {
-        fprintf(stderr, "##### タイムスタンプ間隔を指定してください\n");
-        return 1;
-    }
-    interval = atoi(argv[3]);
-
     arr = (int *)malloc(n * sizeof(int));
 
     fp = fopen(datafile, "r");
+    if (fp == NULL)
+    {
+        fprintf(stderr, "##### ファイルを開けませんでした\n");
+        return 1;
+    }
+
     for (int i = 0; i < n; i++)
     {
-        fscanf(fp, "%d", &arr[i]);
+        if (fscanf(fp, "%d", &arr[i]) != 1)
+        {
+            fprintf(stderr, "##### ファイルからの読み込みエラー\n");
+            fclose(fp);
+            free(arr);
+            return 1;
+        }
     }
     fclose(fp);
 
     time_start = gettime();
-    quick_sort(arr, 0, n - 1, interval, &time_log);
-    time_stamp(&time_log, n);
+    quick_sort(arr, 0, n - 1);
+    time_end = gettime();
 
-    for (timelog *log = time_log; log != NULL; log = log->next)
-        fprintf(stderr, "データ数: %d クイックソートの実行時間 = %lf[秒]\n", log->data_size, log->time_stamp - time_start);
+    for (int i = 0; i < n; i++)
+        printf("%d\n", arr[i]);
+
+    fprintf(stderr, "データ数: %d クイックソートの実行時間 = %lf[秒]\n", n, time_end - time_start);
 
     free(arr);
-    free_time_log(time_log);
 
     return 0;
 }
