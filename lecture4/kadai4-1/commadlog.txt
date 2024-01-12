@@ -1,0 +1,43 @@
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./shellB ../under10M.dat 1000 > /dev/null
+データ数: 1000 シェルソートの実行時間 = 0.000044[秒]
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./shellB ../under10M.dat 5000 > /dev/null
+データ数: 5000 シェルソートの実行時間 = 0.000218[秒]
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./shellB ../under10M.dat 10000 > /dev/null
+データ数: 10000 シェルソートの実行時間 = 0.000469[秒]
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./shellB ../under10M.dat 50000 > /dev/null
+データ数: 50000 シェルソートの実行時間 = 0.010432[秒]
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./shellB ../under10M.dat 100000 > /dev/null
+データ数: 100000 シェルソートの実行時間 = 0.007147[秒]
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./shellB ../under10M.dat 500000 > /dev/null
+データ数: 500000 シェルソートの実行時間 = 0.039094[秒]
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./shellB ../under10M.dat 1000000 > /dev/null
+データ数: 1000000 シェルソートの実行時間 = 0.083383[秒]
+
+--------------------------------------------------------------------------------------
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./quick ../under10M.dat 1000 > /dev/null
+データ数: 1000 クイックソートの実行時間 = 0.000035[秒]
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./quick ../under10M.dat 5000 > /dev/null
+データ数: 5000 クイックソートの実行時間 = 0.000204[秒]
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./quick ../under10M.dat 10000 > /dev/null
+データ数: 10000 クイックソートの実行時間 = 0.000544[秒]
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./quick ../under10M.dat 50000 > /dev/null
+データ数: 50000 クイックソートの実行時間 = 0.002412[秒]
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./quick ../under10M.dat 100000 > /dev/null
+データ数: 100000 クイックソートの実行時間 = 0.006292[秒]
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./quick ../under10M.dat 500000 > /dev/null
+データ数: 500000 クイックソートの実行時間 = 0.021945[秒]
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-1% ./quick ../under10M.dat 1000000 > /dev/null
+データ数: 1000000 クイックソートの実行時間 = 0.046625[秒]
