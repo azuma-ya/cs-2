@@ -21,17 +21,13 @@ void swap(int *a, int *b)
     *b = temp;
 }
 
-void select_sort(int arr[], int n)
+void bubble(int arr[], int n)
 {
     for (int i = 0; i < n - 1; i++)
     {
-        int min_idx = i;
-        for (int j = i + 1; j < n; j++)
-        {
-            if (arr[j] < arr[min_idx])
-                min_idx = j;
-        }
-        swap(&arr[min_idx], &arr[i]);
+        for (int j = 0; j < n - i - 1; j++)
+            if (arr[j] > arr[j + 1])
+                swap(&arr[j], &arr[j + 1]);
     }
 }
 
@@ -39,14 +35,14 @@ int l_select(int arr[], int n, int k)
 {
     if (n < SMALL_N)
     {
-        select_sort(arr, n);
+        bubble(arr, n);
         return arr[k - 1];
     }
 
     // 5個の要素からなるグループに分割してソート
     for (int i = 0; i < n / 5; i++)
     {
-        select_sort(arr + i * 5, 5);
+        bubble(arr + i * 5, 5);
     }
 
     // 中央値の中央値（m）を求める
