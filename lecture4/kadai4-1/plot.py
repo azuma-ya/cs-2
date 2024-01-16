@@ -9,8 +9,28 @@ def shell_sort_complexity(n, a=1.0, b=(3.0 / 2.0)):
     return a * n**b
 
 
+# シェルソートの最悪な計算量オーダーの関数
+def shell_sort_worst(n, a=1.0, b=2):
+    return a * n**b
+
+
+# シェルソートの最良な計算量オーダーの関数
+def shell_sort_best(n, a=1.0, b=1):
+    return a * n**b
+
+
 # クイックソートの理論的な計算量オーダーの関数
 def quick_sort_complexity(n, a=1.0, b=1.0):
+    return a * n * np.log2(n) ** b
+
+
+# クイックソートの最悪な計算量オーダーの関数
+def quick_sort_worst(n, a=1.0, b=1.0):
+    return a * n**b
+
+
+# クイックソートの最良な計算量オーダーの関数
+def quick_sort_best(n, a=1.0, b=1.0):
     return a * n * np.log2(n) ** b
 
 
@@ -58,6 +78,14 @@ slope_quick_fit = params_quick[0]
 theory_shell = shell_sort_complexity(n_values)
 theory_quick = quick_sort_complexity(n_values)
 
+# シェルソートとクイックソートの最悪な計算量オーダーを計算
+worst_shell = shell_sort_worst(n_values)
+worst_quick = quick_sort_worst(n_values)
+
+# シェルソートとクイックソートの最良な計算量オーダーを計算
+best_shell = shell_sort_best(n_values)
+best_quick = quick_sort_best(n_values)
+
 # プロット
 plt.figure(figsize=(10, 6))
 
@@ -69,6 +97,32 @@ plt.plot(
 )
 plt.plot(
     n_values, theory_quick, label="Quick Sort (Theoretical Complexity)", linestyle="--"
+)
+
+plt.plot(
+    n_values,
+    worst_shell,
+    label="Shell Sort (Worst Computational Complexity)",
+    linestyle="--",
+)
+plt.plot(
+    n_values,
+    worst_quick,
+    label="Quick Sort (Worst Computational Complexity)",
+    linestyle="--",
+)
+
+plt.plot(
+    n_values,
+    best_shell,
+    label="Shell Sort (Best Computational Complexity)",
+    linestyle="--",
+)
+plt.plot(
+    n_values,
+    best_quick,
+    label="Quick Sort (Best Computational Complexity)",
+    linestyle="--",
 )
 
 # 最小二乗法による近似曲線をプロット
