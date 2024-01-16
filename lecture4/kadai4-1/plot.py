@@ -150,81 +150,78 @@ plt.title("Algorithm Complexity Comparison")
 
 plt.savefig("plot.png")
 
-# 傾きの比較
-print(
-    "Shell Sort Slope (Theoretical):",
-    shell_sort_complexity((n_values[1])) / shell_sort_complexity((n_values[0])),
-    "Shell Sort Slope (Execution):",
-    time_shell[1] / time_shell[0],
-)
-print(
-    "Shell Sort Slope (Theoretical):",
-    shell_sort_complexity((n_values[2])) / shell_sort_complexity((n_values[0])),
-    "Shell Sort Slope (Execution):",
-    time_shell[2] / time_shell[0],
-)
-print(
-    "Shell Sort Slope (Theoretical):",
-    shell_sort_complexity((n_values[3])) / shell_sort_complexity((n_values[0])),
-    "Shell Sort Slope (Execution):",
-    time_shell[3] / time_shell[0],
-)
-print(
-    "Shell Sort Slope (Theoretical):",
-    shell_sort_complexity((n_values[4])) / shell_sort_complexity((n_values[0])),
-    "Shell Sort Slope (Execution):",
-    time_shell[4] / time_shell[0],
-)
-print(
-    "Shell Sort Slope (Theoretical):",
-    shell_sort_complexity((n_values[5])) / shell_sort_complexity((n_values[0])),
-    "Shell Sort Slope (Execution):",
-    time_shell[5] / time_shell[0],
-)
-print(
-    "Shell Sort Slope (Theoretical):",
-    shell_sort_complexity((n_values[6])) / shell_sort_complexity((n_values[0])),
-    "Shell Sort Slope (Execution):",
-    time_shell[6] / time_shell[0],
-)
+ratio_n_values = [n / n_values[0] for n in n_values[1:]]
+ratio_shell_theory = [n / theory_shell[0] for n in theory_shell[1:]]
+ratio_quick_theory = [n / theory_quick[0] for n in theory_quick[1:]]
+ratio_shell_worst = [n / worst_shell[0] for n in worst_shell[1:]]
+ratio_quick_worst = [n / worst_quick[0] for n in worst_quick[1:]]
+ratio_shell_best = [n / best_shell[0] for n in best_shell[1:]]
+ratio_quick_best = [n / best_quick[0] for n in best_quick[1:]]
+ratio_shell_time = [n / time_shell[0] for n in time_shell[1:]]
+ratio_quick_time = [n / time_quick[0] for n in time_quick[1:]]
 
-print("Shell Sort Slope (Fit):", slope_shell_fit)
+# 棒の配置位置、ラベルを用意
+x = np.array([1, 2, 3, 4, 5, 6])
 
-print(
-    "Quick Sort Slope (Theoretical):",
-    quick_sort_complexity((n_values[1])) / quick_sort_complexity((n_values[0])),
-    "Quick Sort Slope (Execution):",
-    time_quick[1] / time_quick[0],
-)
-print(
-    "Quick Sort Slope (Theoretical):",
-    quick_sort_complexity((n_values[2])) / quick_sort_complexity((n_values[0])),
-    "Quick Sort Slope (Execution):",
-    time_quick[2] / time_quick[0],
-)
-print(
-    "Quick Sort Slope (Theoretical):",
-    quick_sort_complexity((n_values[3])) / quick_sort_complexity((n_values[0])),
-    "Quick Sort Slope (Execution):",
-    time_quick[3] / time_quick[0],
-)
-print(
-    "Quick Sort Slope (Theoretical):",
-    quick_sort_complexity((n_values[4])) / quick_sort_complexity((n_values[0])),
-    "Quick Sort Slope (Execution):",
-    time_quick[4] / time_quick[0],
-)
-print(
-    "Quick Sort Slope (Theoretical):",
-    quick_sort_complexity((n_values[5])) / quick_sort_complexity((n_values[0])),
-    "Quick Sort Slope (Execution):",
-    time_quick[5] / time_quick[0],
-)
-print(
-    "Quick Sort Slope (Theoretical):",
-    quick_sort_complexity((n_values[6])) / quick_sort_complexity((n_values[0])),
-    "Quick Sort Slope (Execution):",
-    time_quick[6] / time_quick[0],
-)
+# 各系列のデータを用意
+data1 = [
+    ratio_shell_theory,
+    ratio_shell_worst,
+    ratio_shell_best,
+    ratio_shell_time,
+]
 
-print("Quick Sort Slope (Fit):", slope_quick_fit)
+data2 = [
+    ratio_quick_theory,
+    ratio_quick_worst,
+    ratio_quick_best,
+    ratio_quick_time,
+]
+
+# マージンを設定
+margin = 0.2  # 0 <margin< 1
+totoal_width = 1 - margin
+
+plt.figure()
+
+# 棒グラフをプロット
+for i, h in enumerate(data1):
+    pos = x - totoal_width * (1 - (2 * i + 1) / len(data1)) / 2
+    plt.bar(pos, np.log(h), width=totoal_width / len(data1))
+
+plt.title("Ratio of 1000 to n times the number of data (Shell)")
+# ラベルの設定
+plt.xticks(x, ratio_n_values)
+plt.xlabel("n times.")
+plt.ylabel("ratio (log)")
+plt.legend(
+    (
+        "mean computational complexity",
+        "worst computational complexity",
+        "best computational complexity",
+        "Actual measurement results",
+    )
+)
+plt.savefig("ratio_shell_plot.png")
+
+plt.figure()
+
+# 棒グラフをプロット
+for i, h in enumerate(data2):
+    pos = x - totoal_width * (1 - (2 * i + 1) / len(data2)) / 2
+    plt.bar(pos, np.log(h), width=totoal_width / len(data2))
+
+plt.title("Ratio of 1000 to n times the number of data (Quick)")
+# ラベルの設定
+plt.xticks(x, ratio_n_values)
+plt.xlabel("n times.")
+plt.ylabel("ratio (log)")
+plt.legend(
+    (
+        "mean computational complexity",
+        "worst computational complexity",
+        "best computational complexity",
+        "Actual measurement results",
+    )
+)
+plt.savefig("ratio_quick_plot.png")
