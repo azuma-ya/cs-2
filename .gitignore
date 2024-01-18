@@ -2,3 +2,5 @@
 test.*
 myenv
 *.dat
+*.md
+*.pdf
