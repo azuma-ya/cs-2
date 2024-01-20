@@ -1,0 +1,33 @@
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-2% ./select ../for-select.dat 20000000 10000
+答え = 495
+k番目選択の実行時間 = 0.198137
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-2% ./select ../for-select.dat 2000000 10000 
+答え = 4988
+k番目選択の実行時間 = 0.011438
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-2% ./select ../for-select.dat 200000 10000 
+答え = 49971
+k番目選択の実行時間 = 0.003149
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-2% ./select ../for-select.dat 20000 10000 
+答え = 502583
+k番目選択の実行時間 = 0.001062
+
+--------------------------------------------------------------------------------------
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-2% ./lselect ../for-select.dat 20000000 10000
+答え = 495
+k番目選択の実行時間 = 0.820737
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-2% ./lselect ../for-select.dat 2000000 10000 
+答え = 4988
+k番目選択の実行時間 = 0.083409
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-2% ./lselect ../for-select.dat 200000 10000  
+答え = 49971
+k番目選択の実行時間 = 0.009418
+
+Azuma-ya:~/Gunma-u/cs-2/lecture4/kadai4-2% ./lselect ../for-select.dat 20000 10000 
+答え = 502583
+k番目選択の実行時間 = 0.001519
