@@ -105,7 +105,7 @@ for i, h in enumerate(data1):
     pos = x - totoal_width * (1 - (2 * i + 1) / len(data1)) / 2
     plt.bar(pos, np.log(h), width=totoal_width / len(data1))
 
-plt.title("Ratio of 20000 to n times the number of data (Shell)")
+plt.title("Ratio of 20000 to n times the number of data (select)")
 # ラベルの設定
 plt.xticks(x, ratio_n_values)
 plt.xlabel("n times.")
@@ -125,7 +125,7 @@ for i, h in enumerate(data2):
     pos = x - totoal_width * (1 - (2 * i + 1) / len(data2)) / 2
     plt.bar(pos, np.log(h), width=totoal_width / len(data2))
 
-plt.title("Ratio of 20000 to n times the number of data (Quick)")
+plt.title("Ratio of 20000 to n times the number of data (l-select)")
 # ラベルの設定
 plt.xticks(x, ratio_n_values)
 plt.xlabel("n times.")
